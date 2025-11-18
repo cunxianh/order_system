@@ -9,7 +9,8 @@ const Profile: React.FC = () => {
     const authContext = useContext(AuthContext);
     const navigate = useNavigate();
     const api = axios.create({
-        baseURL: import.meta.env.VITE_BACKEND_URL
+        baseURL: import.meta.env.VITE_BACKEND_URL,
+        withCredentials: true
     });
 
     const [name, setName] = useState('');
@@ -18,9 +19,7 @@ const Profile: React.FC = () => {
     if (!authContext) throw new Error('AuthContext must be used within AuthProvider');
 
     useEffect(() => {
-        api.get('/profile/me', {
-            withCredentials: true,
-        })
+        api.get('/profile/me')
             .then((res) => {
                 console.log('已登入', res.data);
                 setName(res.data.user.name);
@@ -36,9 +35,7 @@ const Profile: React.FC = () => {
 
 
     function logout(): void {
-        api.post('/users/logout', {}, {
-            withCredentials: true,
-        })
+        api.post('/users/logout')
             .then((res) => {
                 console.log(res.data);
                 alert('已登出');
@@ -57,9 +54,9 @@ const Profile: React.FC = () => {
                 <button onClick={logout}>登出</button>
 
                 <div className="order-buttons">
-                    <button>全局訂單</button>
+                    <button onClick={() => navigate('/all_order')}>所有訂單</button>
                     <button>我的訂單</button>
-                    <button>創建訂單</button>
+                    <button onClick={() => navigate('/create_order')}>創建訂單 </button>
                 </div>
 
             </div>
