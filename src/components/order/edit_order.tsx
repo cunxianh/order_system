@@ -81,10 +81,10 @@ const Edit_panel: React.FC<EditPanelProps> = ({ order, onClose }) => {
 
                 console.log("訂單建立成功 🎉", res)
                 setText(
-  <p className="p-3 text-green-700 bg-green-100 border border-green-300 rounded-lg">
-    訂單建立成功 🎉
-  </p>
-);
+                    <p className="p-3 text-green-700 bg-green-100 border border-green-300 rounded-lg">
+                        訂單建立成功 🎉
+                    </p>
+                );
                 navigate(0);
             })
             .catch((err) => {
@@ -226,7 +226,7 @@ const Edit_panel: React.FC<EditPanelProps> = ({ order, onClose }) => {
 
                 </div>
             </form>
-            
+
         </div>
 
     );

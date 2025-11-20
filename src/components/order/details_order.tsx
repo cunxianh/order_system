@@ -32,31 +32,10 @@ const Detail_panel: React.FC<EditPanelProps> = ({ order, onClose }) => {
     const [status, setStatus] = useState<Order["status"]>(order.status);
     const [text, setText] = useState<React.ReactNode | null>(null);
 
-    const navigate = useNavigate();
-
-
-    const api = useMemo(() => axios.create({
-        baseURL: import.meta.env.VITE_BACKEND_URL,
-        withCredentials: true,
-    }), []);
-
     useEffect(() => {
         setItems(order.items);
 
     }, []);
-
-    const handleItemChange = (index: number, field: keyof OrderItem, value: string | number) => {
-
-        setItems((prev) => {
-            const updated = [...prev];
-            if (field === 'qty') {
-                updated[index][field] = Number(value) as any;
-            } else {
-                updated[index][field] = String(value) as any;
-            }
-            return updated;
-        });
-    };
 
     const statusColors: Record<Order['status'], string> = {
         pending: 'bg-yellow-100 text-yellow-800',
@@ -118,7 +97,6 @@ const Detail_panel: React.FC<EditPanelProps> = ({ order, onClose }) => {
                                         value={item.name}
                                         readOnly
                                         className="text-gray-700 text-sm font-medium w-80% border border-gray-300 rounded-lg bg-gray-200"
-                                        onChange={(e) => handleItemChange(idx, 'name', e.target.value)}
                                     />
                                     <label className="block text-sm font-medium text-gray-700 mb-2">
                                         X
@@ -129,7 +107,6 @@ const Detail_panel: React.FC<EditPanelProps> = ({ order, onClose }) => {
                                         readOnly
                                         value={item.qty}
                                         className="text-gray-700 text-sm font-medium w-80% border border-gray-300 rounded-lg bg-gray-200"
-                                        onChange={(e) => handleItemChange(idx, 'qty', e.target.value)}
                                     />
 
                                 </div>

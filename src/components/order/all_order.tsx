@@ -10,6 +10,8 @@ import Edit_panel from './edit_order';
 
 import Detail_panel from './details_order';
 
+import Pagination from '../../utils/pagination';
+
 interface OrderItem {
     name: string;
     qty: number;
@@ -23,17 +25,26 @@ interface Order {
     created_at: string;
 }
 
+interface pagination_data {
+    hasNextPage: boolean,
+    hasPrevPage: boolean,
+    limit: number,
+    page: number,
+    total: number,
+    totalPages: number
+}
+
 const AllOrder: React.FC = () => {
     const navigate = useNavigate();
     const authContext = useContext(AuthContext);
     const [editOrder, setEditOrder] = useState<Order | null>(null);
     const [detailOrder, setDetailOrder] = useState<Order | null>(null);
 
+    const [pagination_data, setPagination_data] = useState<pagination_data | null>(null);
     const handleClose = () => {
         setEditOrder(null);
         setDetailOrder(null);
     }
-
 
     const statusColors: Record<Order['status'], string> = {
         pending: 'bg-yellow-100 text-yellow-800',
@@ -53,11 +64,31 @@ const AllOrder: React.FC = () => {
     }), []);
     const [orders, setOrders] = useState<Order[]>([]);
 
+    const delete_order = (order: Order) => {
+        const ok = confirm('確定要刪除訂單嗎？');
+        if (!ok) return;
+
+        api.delete(`/orders/${order._id}`)
+            .then((res) => {
+                console.log('已刪除訂單', res.data);
+                navigate(0);
+            })
+            .catch((err) => {
+                console.error(err);
+                alert('無法刪除訂單');
+
+            });
+
+    }
+
+    const pagination_item = (order: Order[]) => {
+        setOrders(order);
+    }
+
     useEffect(() => {
         // 可以在這裡檢查用戶是否已登入，或載入必要的資料
         api.get('/profile/me')
             .then((res) => {
-                console.log('已登入', res.data);
                 setuser(res.data.user.name);
             })
             .catch((err) => {
@@ -65,20 +96,19 @@ const AllOrder: React.FC = () => {
                 alert('請先登入');
                 navigate('/');
             });
-    }, [api, navigate]);
+    }, []);
 
     useEffect(() => {
         api.get('/orders')
             .then((res) => {
-                console.log('訂單資料', res.data);
                 setOrders(res.data.data as Order[]);
-
+                setPagination_data(res.data.pagination as pagination_data);
             })
             .catch((err) => {
                 console.error(err);
                 alert('無法載入訂單資料，請稍後再試。');
             });
-    }, [api, navigate]);
+    }, []);
 
     return (
         <div className="min-h-screen bg-gray-50 ">
@@ -93,12 +123,6 @@ const AllOrder: React.FC = () => {
                             className="mr-4 mt-2 bg-gray-300 text-gray-700 hover:bg-gray-500 hover:text-gray-900 font-medium px-4 py-2 rounded transition-colors duration-200"
                         >
                             Back to Profile
-                        </button>
-
-                        <button
-                            className='px-4 py-2 bg-gray-300 text-gray-700 hover:bg-gray-500 hover:text-gray-900 transition-colors duration-200'
-                        >
-                            個人訂單
                         </button>
 
                     </div>
@@ -170,7 +194,7 @@ const AllOrder: React.FC = () => {
                                             <td>
                                                 <button
                                                     type="button"
-                                                    //onClick={() => removeItem(index)}
+                                                    onClick={() => delete_order(order)}
                                                     className="text-red-400 hover:text-red-900 font-medium px-2 py-1 rounded transition-colors duration-200"
                                                 >
                                                     X
@@ -221,6 +245,13 @@ const AllOrder: React.FC = () => {
                     </div>
 
                 </div>
+            )}
+
+            {pagination_data && (
+                <Pagination
+                    pagination={pagination_data}
+                    order_data={pagination_item}
+                />
             )}
 
         </div>
