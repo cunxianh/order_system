@@ -10,7 +10,7 @@ const Login_auth = () => {
 
   useEffect(() => {
     axios.get("/profile/me", { withCredentials: true })
-      .then((res) => setAuthed(true))
+      .then(() => setAuthed(true))
       .catch(() => setAuthed(false))
       .finally(() => setLoading(false));
   }, []);

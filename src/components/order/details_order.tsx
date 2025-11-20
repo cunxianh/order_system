@@ -1,9 +1,7 @@
 //components/order/edit_order
 
-import React, { useState, useContext, useEffect, useMemo } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
 
 interface EditPanelProps {
     order: Order;
@@ -29,8 +27,8 @@ const Detail_panel: React.FC<EditPanelProps> = ({ order, onClose }) => {
 
     // reference the props to avoid "All destructured elements are unused" compile error
     const [items, setItems] = useState<OrderItem[]>([{ name: '', qty: 1 }]);
-    const [status, setStatus] = useState<Order["status"]>(order.status);
-    const [text, setText] = useState<React.ReactNode | null>(null);
+    const [status] = useState<Order["status"]>(order.status);
+    const [text] = useState<React.ReactNode | null>(null);
 
     useEffect(() => {
         setItems(order.items);

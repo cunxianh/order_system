@@ -1,5 +1,5 @@
 // src/App.tsx
-import { useState, useContext } from 'react'
+import { useContext } from 'react'
 
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -8,7 +8,6 @@ import * as Yup from 'yup'
 import axios from 'axios';
 
 import { Link } from "react-router-dom";
-import { BrowserRouter } from "react-router-dom";
 
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/auth_context';
@@ -44,7 +43,7 @@ function login() {
         });
 
         api.post('/users/login', { name: data.username, password: data.password }, { withCredentials: true })
-            .then((res) => {
+            .then(() => {
 
                 alert('登入成功 🎉');
                 navigate('/profile'); // 跳轉個人資料頁

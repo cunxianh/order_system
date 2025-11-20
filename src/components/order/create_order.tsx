@@ -88,7 +88,7 @@ const CreateOrder: React.FC = () => {
         // api.post('/orders', orderData).then(...).catch(...);
 
         api.post('/orders', orderData)
-            .then((res) => {
+            .then(() => {
                 alert('訂單建立成功 🎉');
                 removeAllItems();
                 addItem();

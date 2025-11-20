@@ -1,7 +1,6 @@
 //utils/pagination.tsx
 
 import React, { useState, useMemo } from 'react';
-import { useSearchParams } from "react-router-dom";
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
 
 import axios from 'axios';
@@ -45,7 +44,7 @@ const Pagination: React.FC<PaginationProps> = ({ pagination, order_data }) => {
     //console.log("totalPages", totalPages)
 
     const [currentPage, setCurrentPage] = useState(page);
-    const [itemsPerPage, setItemsPerPage] = useState(limit);
+    const [itemsPerPage] = useState(limit);
 
     const api = useMemo(() => axios.create({
         baseURL: import.meta.env.VITE_BACKEND_URL,

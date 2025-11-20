@@ -4,7 +4,7 @@ import { AuthContext } from '../context/auth_context';
 import { useState, useContext, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { UserCircleIcon, ClockIcon } from '@heroicons/react/24/outline';
+import { ClockIcon } from '@heroicons/react/24/outline';
 
 const Profile: React.FC = () => {
     const authContext = useContext(AuthContext);
