@@ -1,73 +1,105 @@
-# React + TypeScript + Vite
+# **Order Management System**
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React + TypeScript order management application built with Vite, featuring user authentication, order creation, and order tracking with pagination.
 
-Currently, two official plugins are available:
+## **Features**
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **User Authentication**
+    - User registration and login
+- **Order Management**
+    - Create new orders with multiple items
+    - View all orders with pagination
+    - Edit order details and status
+    - Delete orders
+- **User Profile**
+    - View user information
 
-## React Compiler
+## **Tech Stack**
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Frontend Framework**: React 19 + TypeScript
+- **Build Tool**: Vite
+- **Styling**: Tailwind CSS v4
+- **Form Handling**: React Hook Form + Yup validation
+- **HTTP Client**: Axios
+- **Icons**: Heroicons + Lucide React
+- **Routing**: React Router v7
 
-## Expanding the ESLint configuration
+## **API Endpoints**
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+The application communicates with a backend API. Key endpoints:
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- `POST /users/register` - User registration
+- `POST /users/login` - User login
+- `POST /users/logout` - User logout
+- `GET /profile/me` - Get current user profile
+- `GET /orders` - Get all orders (with pagination)
+- `POST /orders` - Create new order
+- `PATCH /orders/:id` - Update order
+- `DELETE /orders/:id` - Delete order
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## **Features in Detail**
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Authentication
+
+- Form validation using Yup schema
+- Secure login with credentials
+- Session persistence via cookies
+- Protected routes via Login_auth guard
+
+### Order Management
+
+- Dynamic item management in orders
+- Pagination with configurable page size
+- Edit and delete functionality (owner only)
+- Order detail preview modal
+
+### UI/UX
+
+- Responsive design with Tailwind CSS
+- Modal dialogs for editing/viewing
+- Status badge color coding
+- pagination controls
+
+## **Getting Started**
+
+### Prerequisites
+
+- Node.js 18+
+- npm or yarn
+
+### Installation
+
+```
+cd order_system
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Environment Setup
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Create a .env file in the project root:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```jsx
+VITE_BACKEND_URL=http://localhost:3000
 ```
+
+### Development
+
+```jsx
+npm run dev
+```
+
+The app will be available at `http://localhost:5173`
+
+### Build
+
+```jsx
+npm run build
+```
+
+## **Contributing**
+
+Feel free to submit issues and enhancement requests.
+
+## **License**
+
+This project for educational purposes.
