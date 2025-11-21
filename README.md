@@ -26,8 +26,6 @@ A React + TypeScript order management application built with Vite, featuring use
 
 ## **route**
 
-The application communicates with a backend API. Key endpoints:
-
 - `/register` - User registration
 - `/` - User login
 - `/profile` - Get current user profile
