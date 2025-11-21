@@ -24,18 +24,15 @@ A React + TypeScript order management application built with Vite, featuring use
 - **Icons**: Heroicons + Lucide React
 - **Routing**: React Router v7
 
-## **API Endpoints**
+## **route**
 
 The application communicates with a backend API. Key endpoints:
 
-- `POST /users/register` - User registration
-- `POST /users/login` - User login
-- `POST /users/logout` - User logout
-- `GET /profile/me` - Get current user profile
-- `GET /orders` - Get all orders (with pagination)
-- `POST /orders` - Create new order
-- `PATCH /orders/:id` - Update order
-- `DELETE /orders/:id` - Delete order
+- `/register` - User registration
+- `/` - User login
+- `/profile` - Get current user profile
+- `/all_order` - Get all orders (with pagination)
+- `/create_order` - Create new order
 
 ## **Features in Detail**
 
