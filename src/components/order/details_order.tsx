@@ -45,85 +45,82 @@ const Detail_panel: React.FC<EditPanelProps> = ({ order, onClose }) => {
     };
 
     return (
-        <div className="bg-white rounded-lg p-6 max-w-2.5xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-2 flex items-center justify-between mb-6 border-b border-gray-200">
-                <h2 className="text-2xl font-bold text-gray-800">訂單預覽</h2>
-                <>{text}</>
+        <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] flex flex-col overflow-hidden">
+            {/* Header */}
+            <div className="px-6 py-5 border-b border-gray-100 flex items-center justify-between bg-white sticky top-0 z-10">
+                <div>
+                    <h2 className="text-xl font-bold text-gray-900">訂單詳情</h2>
+                    <p className="text-sm text-gray-500 mt-1">查看訂單 #{order._id.slice(-6).toUpperCase()} 的詳細資訊</p>
+                </div>
                 <button
-                    className="p-2 hover:bg-gray-100 rounded-full transition-colors"
                     onClick={onClose}
+                    className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-400 hover:text-gray-600"
                 >
-                    <X className="w-4 h-4 text-gray-600" />
+                    <X className="w-5 h-5" />
                 </button>
             </div>
 
-                <div className="space-y-2">
-                    <div className='flex items-center gap-2'>
-                        <label className="block text-sm font-medium text-gray-700">
+            {/* Scrollable Content */}
+            <div className="p-6 overflow-y-auto space-y-8">
+
+                {/* Basic Info Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
+                        <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 flex items-center gap-1">
                             訂單編號
                         </label>
-                        <input
-                            type="text"
-                            value={order._id}
-                            readOnly
-                            className="text-gray-700 text-sm font-medium w-80% border border-gray-300 rounded-lg bg-gray-200"
-                        />
-
-                        <label className="block text-sm font-medium text-gray-700">
-                            客戶名稱
-                        </label>
-                        <input
-                            type="text"
-                            defaultValue={order.customer}
-                            readOnly
-                            className="text-gray-700 text-sm font-medium w-80% border border-gray-300 rounded-lg bg-gray-200"
-                        />
-                    </div>
-
-                    <div className='border border-gray-200 '>
-                        <label className="p-4 text-1xl font-bold text-gray-800 border-b border-gray-400 block">
-                            訂單
-                        </label>
-                        <div className='max-h-[30vh] overflow-y-auto'>
-                            {items.map((item: OrderItem, idx: number) => (
-                                <div key={idx} className='p-2 m-4 flex items-center gap-4 border-b border-gray-200'>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                                        {idx}
-                                    </label>
-                                    <input
-                                        type="text"
-                                        value={item.name}
-                                        readOnly
-                                        className="text-gray-700 text-sm font-medium w-80% border border-gray-300 rounded-lg bg-gray-200"
-                                    />
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                                        X
-                                    </label>
-                                    <input
-                                        type="number"
-                                        min={1}
-                                        readOnly
-                                        value={item.qty}
-                                        className="text-gray-700 text-sm font-medium w-80% border border-gray-300 rounded-lg bg-gray-200"
-                                    />
-
-                                </div>
-                            ))}
+                        <div className="font-mono text-gray-900 font-medium">
+                            {order._id}
                         </div>
                     </div>
-                    <div className="flex items-center gap-2 justify-center">
-                        <label className="block text-sm font-medium text-gray-700">
-                            訂單狀態:  
-                            <span className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${statusColors[status]}`}>
-                                {status}
-                            </span>
+                    <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
+                        <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 flex items-center gap-1">
+                            客戶名稱
                         </label>
+                        <div className="text-gray-900 font-medium">
+                            {order.customer}
+                        </div>
                     </div>
-
                 </div>
-            
-        </div>
 
+                {/* Items List */}
+                <div>
+                    <h3 className="text-sm font-bold text-gray-900 mb-3 flex items-center gap-2">
+                        <span>📦</span> 訂單內容 ({items.length})
+                    </h3>
+                    <div className="border border-gray-200 rounded-lg overflow-hidden">
+                        <table className="w-full text-sm text-left">
+                            <thead className="bg-gray-50 text-gray-500 font-medium border-b border-gray-200">
+                                <tr>
+                                    <th className="px-4 py-3 w-16 text-center">#</th>
+                                    <th className="px-4 py-3">商品名稱</th>
+                                    <th className="px-4 py-3 text-right">數量</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-gray-100">
+                                {items.map((item: any, idx: number) => (
+                                    <tr key={idx} className="hover:bg-gray-50/50">
+                                        <td className="px-4 py-3 text-center text-gray-400">{idx + 1}</td>
+                                        <td className="px-4 py-3 font-medium text-gray-900">{item.name}</td>
+                                        <td className="px-4 py-3 text-right text-gray-600">
+                                            x <span className="font-bold text-blue-600">{item.qty}</span>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                {/* Status Section */}
+                <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                    <span className="text-sm font-medium text-gray-500">當前狀態</span>
+                    <span className={`px-4 py-1.5 rounded-full text-sm font-bold shadow-sm ${statusColors[order.status] || 'bg-gray-100 text-gray-800'}`}>
+                        {order.status}
+                    </span>
+                </div>
+            </div>
+        </div>
     );
 
 }

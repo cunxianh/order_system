@@ -1,8 +1,7 @@
 // components/order/create_order.tsx
-import React, { useState, useContext, useEffect, useMemo } from 'react';
-import axios from 'axios';
-import { AuthContext } from '../../context/auth_context';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import {API} from '../../api/backend_connect';
 
 type Item = {
     name: string;
@@ -10,17 +9,9 @@ type Item = {
 };
 
 const CreateOrder: React.FC = () => {
-    const authContext = useContext(AuthContext);
     const navigate = useNavigate();
 
-
-
-    if (!authContext) throw new Error('AuthContext must be used within AuthProvider');
-
-    const api = useMemo(() => axios.create({
-        baseURL: import.meta.env.VITE_BACKEND_URL,
-        withCredentials: true,
-    }), []);
+    const api = useMemo(() => API, []);
 
     const [customer, setCustomer] = useState<string>('');
 

@@ -1,23 +1,17 @@
 //componebts/profile.tsx
 import React from 'react';
-import { AuthContext } from '../context/auth_context';
-import { useState, useContext, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { ClockIcon } from '@heroicons/react/24/outline';
+import {API} from '../api/backend_connect';
+
 
 const Profile: React.FC = () => {
-    const authContext = useContext(AuthContext);
     const navigate = useNavigate();
-    const api = axios.create({
-        baseURL: import.meta.env.VITE_BACKEND_URL,
-        withCredentials: true
-    });
+    const api = API;
 
     const [name, setName] = useState('');
     const [createdAt, setCreatedAt] = useState('');
-
-    if (!authContext) throw new Error('AuthContext must be used within AuthProvider');
 
     useEffect(() => {
         api.get('/profile/me')

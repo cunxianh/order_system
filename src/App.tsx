@@ -5,8 +5,8 @@ import './App.css'
 import { Routes, Route } from "react-router-dom";
 
 import { BrowserRouter } from "react-router-dom";
-import { AuthProvider } from './context/auth_context';
-
+import { LoadingProvider } from './context/LoadingContext';
+import GlobalLoading from "./components/loading/Loading";
 
 import Register from "./components/register";
 import Login from "./components/login";
@@ -19,7 +19,7 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <AuthProvider>
+        <LoadingProvider>
           <Routes>
             <Route path="/" element={<Login />} />
             <Route path="/register" element={<Register />} />
@@ -27,9 +27,10 @@ function App() {
             <Route path="/profile" element={<User_profile />} />
             <Route path="/create_order" element={<CreateOrder />} />
             <Route path="/all_order" element={<AllOrder />} />
-
+            
           </Routes>
-        </AuthProvider>
+          <GlobalLoading/>
+        </LoadingProvider>
       </BrowserRouter>
     </>
   )

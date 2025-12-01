@@ -1,8 +1,6 @@
 //components/order/all_order.tsx
 
-import React, { useState, useEffect, useContext, useMemo } from 'react';
-import axios from 'axios';
-import { AuthContext } from '../../context/auth_context';
+import React, { useState, useEffect, useMemo } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
@@ -11,6 +9,9 @@ import Edit_panel from './edit_order';
 import Detail_panel from './details_order';
 
 import Pagination from '../../utils/pagination';
+
+import { API } from '../../api/backend_connect';
+
 
 interface OrderItem {
     name: string;
@@ -36,7 +37,6 @@ interface pagination_data {
 
 const AllOrder: React.FC = () => {
     const navigate = useNavigate();
-    const authContext = useContext(AuthContext);
     const [editOrder, setEditOrder] = useState<Order | null>(null);
     const [detailOrder, setDetailOrder] = useState<Order | null>(null);
 
@@ -56,12 +56,8 @@ const AllOrder: React.FC = () => {
     };
 
     const [user, setuser] = useState('');
-    if (!authContext) throw new Error('AuthContext must be used within AuthProvider');
 
-    const api = useMemo(() => axios.create({
-        baseURL: import.meta.env.VITE_BACKEND_URL,
-        withCredentials: true,
-    }), []);
+    const api = useMemo(() => API, []);
     const [orders, setOrders] = useState<Order[]>([]);
 
     const delete_order = (order: Order) => {
@@ -111,149 +107,208 @@ const AllOrder: React.FC = () => {
     }, []);
 
     return (
-        <div className="min-h-screen bg-gray-50 ">
-            <div>
-                <header className="bg-white shadow-sm">
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-                        <h1 className="text-2xl font-bold text-gray-900">訂單管理系統</h1>
+        <div className="min-h-screen bg-gray-50/80">
+            {/* Header - 手機時變成漢堡選單風格 */}
+            <header className="bg-white border-b border-gray-200 sticky top-0 z-40 shadow-sm">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="flex items-center justify-between h-16">
+                        <div className="flex items-center gap-3">
+                            <div className="bg-blue-600 text-white p-2 rounded-lg shadow-sm text-lg">
+                                📦
+                            </div>
+                            <h1 className="text-lg sm:text-xl font-bold text-gray-900 tracking-tight">
+                                訂單管理系統
+                            </h1>
+                        </div>
 
+                        {/* 手機隱藏按鈕，改用右上角返回箭頭 */}
                         <button
-                            type="button"
                             onClick={() => navigate('/profile')}
-                            className="mr-4 mt-2 bg-gray-300 text-gray-700 hover:bg-gray-500 hover:text-gray-900 font-medium px-4 py-2 rounded transition-colors duration-200"
+                            className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-all duration-200 sm:px-4"
                         >
-                            Back to Profile
+                            <span className="text-lg">←</span>
+                            <span className="hidden sm:inline">返回個人資料</span>
                         </button>
-
-                    </div>
-                </header>
-
-
-
-            </div>
-            {/* 主要內容區 */}
-            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <div className="bg-white rounded-lg shadow">
-                    <div className="px-6 py-4 border-b border-gray-200">
-                        <h1 className="text-lg font-semibold text-gray-800">所有訂單</h1>
                     </div>
                 </div>
-                <div>
-                    <table className="w-full">
-                        <thead className="bg-gray-50">
-                            <tr>
-                                <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">訂單ID</th>
-                                <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">客戶名稱</th>
-                                <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">商品列表</th>
-                                <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">建立時間</th>
-                                <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">狀態</th>
-                                <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">操作</th>
-                            </tr>
-                        </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
-                            {orders.map((order) => (
-                                <tr key={order._id} className="hover:bg-gray-50">
-                                    <td className="px-2 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                        <a href='#' onClick={(e) => {
-                                            e.preventDefault();
-                                            setDetailOrder(order);
+            </header>
 
-                                        }}>
-                                            {order._id}
-                                        </a>
+            {/* Main Content */}
+            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+                <div className="bg-white rounded-xl sm:rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
 
+                    {/* 標題區 - 手機變直式 */}
+                    <div className="px-4 py-5 sm:px-6 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                            <div>
+                                <h2 className="text-lg sm:text-xl font-bold text-gray-900 flex items-center gap-2">
+                                    所有訂單
+                                    <span className="px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-700 text-xs font-semibold">
+                                        {orders.length} 筆
+                                    </span>
+                                </h2>
+                                <p className="mt-1 text-sm text-gray-600 hidden sm:block">
+                                    查看並管理您的客戶訂單與狀態
+                                </p>
+                            </div>
+                        </div>
+                    </div>
 
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{order.customer}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                                        <div>
-                                            {order.items.map((item: any, index: number) => (
-                                                <div key={item.id ?? index} className="mb-1">
-                                                    {item.name} x {item.qty}
+                    {/* 表格 - 手機變成卡片式！ */}
+                    <div className="overflow-x-auto">
+                        {/* 大螢幕：傳統表格 */}
+                        <table className="w-full text-left border-collapse hidden md:table">
+                            <thead>
+                                <tr className="bg-gray-50 border-b-2 border-gray-200 text-xs uppercase text-gray-600 font-bold tracking-wider">
+                                    <th className="px-6 py-4 text-left">訂單 ID</th>
+                                    <th className="px-6 py-4 text-left">客戶</th>
+                                    <th className="px-6 py-4 text-left">商品</th>
+                                    <th className="px-6 py-4 text-left">時間</th>
+                                    <th className="px-6 py-4 text-left">狀態</th>
+                                    <th className="px-6 py-4 text-right">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-gray-100">
+                                {orders.map((order) => (
+                                    <tr key={order._id} className="hover:bg-gray-50 transition-colors">
+
+                                        <td className="px-6 py-4">
+                                            <a href="#" onClick={(e) => { e.preventDefault(); setDetailOrder(order); }}
+                                                className="font-mono text-blue-600 hover:underline"># {order._id.slice(-6).toUpperCase()}</a>
+                                        </td>
+
+                                        <td className="px-6 py-4 whitespace-nowrap">
+                                            <div className="flex items-center gap-3">
+                                                <div className="h-8 w-8 rounded-full bg-gradient-to-br from-indigo-100 to-blue-100 text-blue-600 flex items-center justify-center text-sm font-bold shadow-inner">
+                                                    {order.customer.charAt(0).toUpperCase()}
                                                 </div>
-                                            ))}
-                                        </div>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{new Date(order.created_at).toLocaleString()}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <span className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${statusColors[order.status]}`}>
+                                                <span className="font-medium text-gray-900 text-sm">{order.customer}</span>
+                                            </div>
+                                        </td>
+
+                                        <td className="px-6 py-4 max-w-xs">
+                                            <div className="flex flex-wrap gap-1.5">
+                                                {order.items.slice(0, 3).map((item: any, i: number) => (
+                                                    <span key={i} className="px-2 py-1 bg-gray-100 rounded text-xs">
+                                                        {item.name} ×{item.qty}
+                                                    </span>
+                                                ))}
+                                                {order.items.length > 3 && <span className="text-xs text-gray-500">+{order.items.length - 3}</span>}
+                                            </div>
+                                        </td>
+
+                                        <td className="px-6 py-4 text-sm text-gray-600">
+                                            {new Date(order.created_at).toLocaleDateString()}
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <span className={`px-3 py-1 rounded-full text-xs font-medium ${statusColors[order.status]}`}>
+                                                {order.status}
+                                            </span>
+                                        </td>
+
+                                        <td className="px-6 py-4 text-right">
+                                            {user === order.customer && (
+                                                <div className="flex justify-end gap-4">
+                                                    <button onClick={() => setEditOrder(order)} className="hover:cursor-pointer text-indigo-600 hover:text-indigo-800 hover:underline font-medium">編輯</button>
+                                                    <button onClick={() => delete_order(order)} className="hover:cursor-pointer text-red-600 hover:text-red-800 hover:underline font-medium">刪除</button>
+                                                </div>
+                                            )}
+                                        </td>
+
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+
+                        {/* 手機版：卡片式列表 */}
+                        <div className="md:hidden divide-y divide-gray-200">
+                            {orders.map((order) => (
+                                <div key={order._id} className="p-5 hover:bg-gray-50 transition-colors">
+                                    <div className="flex justify-between items-start mb-3">
+                                        <a href="#" onClick={(e) => { e.preventDefault(); setDetailOrder(order); }}
+                                            className="font-mono text-lg font-bold text-blue-600"># {order._id.slice(-6).toUpperCase()}</a>
+                                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${statusColors[order.status]}`}>
                                             {order.status}
                                         </span>
-                                    </td>
-                                    {user === order.customer && (
-                                        <>
-                                            <td className="px-2 py-4 whitespace-nowrap text-sm">
-                                                <button
-                                                    onClick={() => setEditOrder(order)}
-                                                    className="bg-blue-100 px-3 py-1.5 border border-blue-300 text-blue-700 rounded-md text-sm font-medium hover:bg-blue-200"
-                                                >
-                                                    編輯
-                                                </button>
+                                    </div>
 
-                                            </td>
-                                            <td>
-                                                <button
-                                                    type="button"
-                                                    onClick={() => delete_order(order)}
-                                                    className="text-red-400 hover:text-red-900 font-medium px-2 py-1 rounded transition-colors duration-200"
-                                                >
-                                                    X
-                                                </button>
-                                            </td>
-                                        </>
-                                    )}
+                                    <div className="space-y-3 text-sm">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-100 to-blue-100 flex items-center justify-center text-blue-700 font-bold">
+                                                {order.customer[0].toUpperCase()}
+                                            </div>
+                                            <div>
+                                                <p className="font-medium text-gray-900">{order.customer}</p>
+                                                <p className="text-gray-500">{new Date(order.created_at).toLocaleDateString()} {new Date(order.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                                            </div>
+                                        </div>
 
-                                </tr>
+                                        <div>
+                                            <p className="text-gray-600 font-medium mb-1">商品：</p>
+                                            <div className="flex flex-wrap gap-2">
+                                                {order.items.map((item: any, i: number) => (
+                                                    <span key={i} className="px-2 py-1 bg-gray-100 rounded text-xs">
+                                                        {item.name} ×{item.qty}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                        {user === order.customer && (
+                                            <div className="flex gap-4 pt-2">
+                                                <button onClick={() => setEditOrder(order)} className="hover:cursor-pointer text-indigo-600 font-medium">編輯訂單</button>
+                                                <button onClick={() => delete_order(order)} className="hover:cursor-pointer text-red-600 font-medium">刪除</button>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
                             ))}
-                        </tbody>
-                    </table>
+                        </div>
+                    </div>
+
+                    {/* 空狀態 */}
+                    {orders.length === 0 && (
+                        <div className="text-center py-16">
+                            <p className="text-gray-500">目前沒有任何訂單喔～</p>
+                        </div>
+                    )}
                 </div>
             </main>
+
+            {/* Modals - 保持邏輯不變，僅微調背景遮罩樣式 */}
             {editOrder && (
-                <div className="fixed inset-0 z-50 overflow-y-auto ">
+                <div className="fixed inset-0 z-50 overflow-y-auto">
                     <div
-                        className="backdrop-blur-md fixed inset-0 bg-black/80"
+                        className="fixed inset-0 bg-gray-900/50 backdrop-blur-sm transition-opacity"
                         onClick={() => handleClose()}
                     />
                     <div className="flex min-h-full items-center justify-center p-4">
-                        <div className="relative">
-                            <Edit_panel
-                                order={editOrder}
-                                onClose={handleClose}
-                            />
+                        <div className="relative transform transition-all w-full max-w-lg">
+                            <Edit_panel order={editOrder} onClose={handleClose} />
                         </div>
-
                     </div>
-
                 </div>
             )}
 
             {detailOrder && (
-                <div className="fixed inset-0 z-50 overflow-y-auto ">
+                <div className="fixed inset-0 z-50 overflow-y-auto">
                     <div
-                        className="backdrop-blur-md fixed inset-0 bg-black/80"
+                        className="fixed inset-0 bg-gray-900/50 backdrop-blur-sm transition-opacity"
                         onClick={() => handleClose()}
                     />
                     <div className="flex min-h-full items-center justify-center p-4">
-                        <div className="relative">
-                            <Detail_panel
-                                order={detailOrder}
-                                onClose={handleClose}
-                            />
+                        <div className="relative transform transition-all w-full max-w-2xl">
+                            <Detail_panel order={detailOrder} onClose={handleClose} />
                         </div>
-
                     </div>
-
                 </div>
             )}
 
             {pagination_data && (
-                <Pagination
-                    pagination={pagination_data}
-                    order_data={pagination_item}
-                />
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8 mt-8">
+                    <Pagination pagination={pagination_data} order_data={pagination_item} />
+                </div>
             )}
-
         </div>
     );
 }
