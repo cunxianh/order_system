@@ -13,7 +13,7 @@ export const subscribeLoading = (callback: (isLoading: boolean) => void) => {
 };
 
 let activeRequests = 0;
-let loadingTimer: NodeJS.Timeout | null = null;
+let loadingTimer: ReturnType<typeof setTimeout> | null = null;
 const showLoading = () => {
   loadingListeners.forEach(cb => cb(true));
 };

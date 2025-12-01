@@ -27,8 +27,6 @@ const Detail_panel: React.FC<EditPanelProps> = ({ order, onClose }) => {
 
     // reference the props to avoid "All destructured elements are unused" compile error
     const [items, setItems] = useState<OrderItem[]>([{ name: '', qty: 1 }]);
-    const [status] = useState<Order["status"]>(order.status);
-    const [text] = useState<React.ReactNode | null>(null);
 
     useEffect(() => {
         setItems(order.items);
