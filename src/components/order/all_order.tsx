@@ -206,9 +206,9 @@ const AllOrder: React.FC = () => {
                                             </span>
                                         </td>
 
-                                        <td className="px-6 py-4 text-right">
+                                        <td className="flex-wrap px-6 py-4 text-right">
                                             {user === order.customer && (
-                                                <div className="flex justify-end gap-4">
+                                                <div className="flex flex-wrap justify-end gap-4">
                                                     <button onClick={() => setEditOrder(order)} className="hover:cursor-pointer text-indigo-600 hover:text-indigo-800 hover:underline font-medium">編輯</button>
                                                     <button onClick={() => delete_order(order)} className="hover:cursor-pointer text-red-600 hover:text-red-800 hover:underline font-medium">刪除</button>
                                                 </div>
@@ -256,8 +256,8 @@ const AllOrder: React.FC = () => {
 
                                         {user === order.customer && (
                                             <div className="flex gap-4 pt-2">
-                                                <button onClick={() => setEditOrder(order)} className="hover:cursor-pointer text-indigo-600 font-medium">編輯訂單</button>
-                                                <button onClick={() => delete_order(order)} className="hover:cursor-pointer text-red-600 font-medium">刪除</button>
+                                                <button onClick={() => setEditOrder(order)} className="hover:cursor-pointer hover:text-indigo-800 hover:underline text-indigo-600 font-medium">編輯訂單</button>
+                                                <button onClick={() => delete_order(order)} className="hover:cursor-pointer hover:text-red-800 hover:underline text-red-600 font-medium">刪除</button>
                                             </div>
                                         )}
                                     </div>

@@ -88,8 +88,8 @@ const Pagination: React.FC<PaginationProps> = ({ pagination, order_data }) => {
             setCurrentPage(page);
             api.get(`/orders?page=${page}&limit=${limit}`)
                 .then((res) => {
-                    console.log('分頁資料', res.data.data);
-                    console.log(typeof order_data)
+                    //console.log('分頁資料', res.data.data);
+                    //console.log(typeof order_data)
                     if (order_data && typeof order_data === 'function') {
                         order_data(res.data.data);
                     }

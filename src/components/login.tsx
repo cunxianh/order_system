@@ -54,7 +54,7 @@ function login() {
                 <div className="text-center">
 
                     <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
-                        登入夜面
+                        登入頁面
                     </h1>
                     <p className="mt-2 text-sm text-gray-500">
                         請輸入您的帳號密碼以登入系統
